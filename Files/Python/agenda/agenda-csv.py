@@ -8,32 +8,25 @@ import csv
 ARCHIVO="agenda.csv"
 CAMPOS=["Nombre","Apellido","Telefono","Cumpleaños"]
 
-def leer_csv(datos_csv):
-    """ Devuelve la siguiente línea o None si se terminó el archivo. """
-    try:
-        return datos_csv.next()
-    except:
-        return None
-
 def leer_datos(archivo):
     """ Carga todos los datos del archivo en una lista y la devuelve. """
-    abierto = open(archivo)
-    datos_csv = csv.reader(abierto)
-    campos = leer_csv(datos_csv)
-    print(campos)
-    datos = []
-    elemento = leer_csv(datos_csv)
-    while elemento:
-        print(elemento)
-        datos.append(elemento)
-        elemento = leer_csv(datos_csv)
-        print(datos)
-    abierto.close()
+    with open(ARCHIVO, newline='') as csvfile:
+        first_line = True;
+        datos_csv = csv.reader(csvfile)
+        datos = []
+
+        campos = {}
+        for row in datos_csv:
+            if(first_line):
+                elemento = row
+                first_line = False
+            else:
+                datos.append(row)
     return datos
 
 def guardar_datos(datos, archivo):
     """ Guarda los datos recibidos en el archivo. """
-    abierto = open(archivo,"wb", newline='')
+    abierto = open(archivo,"w", newline='')
     datos_csv = csv.writer(abierto)
     datos_csv.writerow(CAMPOS)
     datos_csv.writerows(datos)
